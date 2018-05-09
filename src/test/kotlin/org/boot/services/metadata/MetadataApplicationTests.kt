@@ -8,7 +8,6 @@ import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.web.reactive.function.client.WebClient
-import org.springframework.web.reactive.function.client.bodyToMono
 import reactor.test.test
 
 @ExtendWith(SpringExtension::class)
@@ -18,17 +17,35 @@ class MetadataApplicationTests(@LocalServerPort port: Int) {
     private val client = WebClient.create("http://localhost:$port")
 
 	@Test
-	fun `get of hello URI should return Hello World!`() {
-		client.get().uri("/api/welcome").accept(APPLICATION_JSON)
+	fun `get all metadata`() {
+		client.get().uri("/api/metadata/").accept(APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono<Metadata>()
+                .bodyToFlux(Metadata::class.java)
                 .test()
                 .consumeNextWith {
-                    assertEquals("message", it.name)
-                    assertEquals("welcome", it.value)
+                    assertEquals("name", it.name)
+                    assertEquals("sunit", it.value)
+                }
+                .consumeNextWith {
+                    assertEquals("city", it.name)
+                    assertEquals("pune", it.value)
                 }
                 .verifyComplete()
 
 	}
+
+    @Test
+    fun `get a metadata`() {
+        client.get().uri("/api/metadata/1234").accept(APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(Metadata::class.java)
+                .test()
+                .consumeNextWith {
+                    assertEquals("1234", it.name)
+                    assertEquals("sunit", it.value)
+                }
+                .verifyComplete()
+
+    }
 
 }

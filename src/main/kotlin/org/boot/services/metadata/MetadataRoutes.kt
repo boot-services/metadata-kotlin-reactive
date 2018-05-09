@@ -12,7 +12,10 @@ class MetadataRoutes (val metadata: MetadataApiHandler) {
     fun apiRouter() =
             router {
                 (accept(MediaType.APPLICATION_JSON) and "/api").nest {
-                    GET("/welcome", metadata::welcome)
+                    "/metadata".nest {
+                        GET("/", metadata::findAll)
+                        GET("/{id}", metadata::findOne)
+                    }
                 }
             }
 }
