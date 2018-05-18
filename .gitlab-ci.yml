@@ -1,0 +1,9 @@
+image: maven:3.5.3-jdk-8-alpine
+
+services:
+  - mongodb
+
+test:
+  script:
+    - mvn clean test
+    - cat target/site/jacoco/index.html
