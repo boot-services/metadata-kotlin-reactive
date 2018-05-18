@@ -6,4 +6,3 @@ services:
 test:
   script:
     - mvn clean test
-    - cat target/site/jacoco/index.html
