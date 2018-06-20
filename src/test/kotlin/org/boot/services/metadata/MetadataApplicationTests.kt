@@ -1,6 +1,6 @@
 package org.boot.services.metadata
 
-import org.junit.jupiter.api.Assertions.assertEquals
+import io.kotlintest.shouldBe
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.context.SpringBootTest
@@ -23,12 +23,12 @@ class MetadataApplicationTests(@LocalServerPort port: Int) {
                 .bodyToFlux(Metadata::class.java)
                 .test()
                 .consumeNextWith {
-                    assertEquals("name", it.name)
-                    assertEquals("sunit", it.value)
+                    it.name shouldBe "name"
+                    it.value shouldBe "sunit"
                 }
                 .consumeNextWith {
-                    assertEquals("city", it.name)
-                    assertEquals("pune", it.value)
+                    it.name shouldBe "city"
+                    it.value shouldBe "pune"
                 }
                 .verifyComplete()
 
@@ -41,8 +41,8 @@ class MetadataApplicationTests(@LocalServerPort port: Int) {
                 .bodyToMono(Metadata::class.java)
                 .test()
                 .consumeNextWith {
-                    assertEquals("1234", it.name)
-                    assertEquals("sunit", it.value)
+                    it.name shouldBe "1234"
+                    it.value shouldBe "sunit"
                 }
                 .verifyComplete()
 
