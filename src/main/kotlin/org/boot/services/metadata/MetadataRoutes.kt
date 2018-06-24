@@ -14,7 +14,7 @@ class MetadataRoutes (val metadata: MetadataApiHandler) {
                 (accept(MediaType.APPLICATION_JSON) and "/api").nest {
                     "/metadata".nest {
                         GET("/", metadata::findAll)
-                        GET("/{id}", metadata::findOne)
+                        GET("/{name}", metadata::findOne)
                     }
                 }
             }

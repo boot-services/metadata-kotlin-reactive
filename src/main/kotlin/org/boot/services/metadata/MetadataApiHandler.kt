@@ -1,19 +1,23 @@
 package org.boot.services.metadata
 
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.MediaType.APPLICATION_JSON_UTF8
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse.ok
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
+import org.springframework.web.reactive.function.server.body
 
 @Component
 class MetadataApiHandler {
 
-    fun findAll(request: ServerRequest) = ok()
-                    .body(Flux.just(Metadata("name","sunit"),Metadata("city","pune")), Metadata::class.java)
+    @Autowired
+    lateinit var metadata: MetadataRepository
 
-    fun findOne(request: ServerRequest) = ok()
-            .body(Mono.just(Metadata(request.pathVariable("id"),"sunit")), Metadata::class.java)
+    fun findAll(request: ServerRequest) = ok().contentType(APPLICATION_JSON_UTF8)
+            .body(metadata.findAll())
+
+    fun findOne(request: ServerRequest) = ok().contentType(APPLICATION_JSON_UTF8)
+            .body(metadata.findByName(request.pathVariable("name")))
 
 }
 
