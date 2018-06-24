@@ -11,7 +11,8 @@ class MetadataRoutes (val metadata: MetadataApiHandler) {
     @Bean
     fun apiRouter() =
             router {
-                (accept(MediaType.APPLICATION_JSON) and "/api").nest {
+                (accept(MediaType.APPLICATION_JSON) and "/api")
+                .nest {
                     "/metadata".nest {
                         GET("/", metadata::findAll)
                         GET("/{name}", metadata::findOne)

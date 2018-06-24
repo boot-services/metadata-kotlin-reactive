@@ -8,16 +8,13 @@ import org.springframework.web.reactive.function.server.ServerResponse.ok
 import org.springframework.web.reactive.function.server.body
 
 @Component
-class MetadataApiHandler {
+class MetadataApiHandler(@Autowired val metadata: MetadataRepository) {
 
-    @Autowired
-    lateinit var metadata: MetadataRepository
+    fun findAll(request: ServerRequest) = json().body(metadata.findAll())
 
-    fun findAll(request: ServerRequest) = ok().contentType(APPLICATION_JSON_UTF8)
-            .body(metadata.findAll())
+    fun findOne(request: ServerRequest) = json().body(metadata.findByName(request.pathVariable("name")))
 
-    fun findOne(request: ServerRequest) = ok().contentType(APPLICATION_JSON_UTF8)
-            .body(metadata.findByName(request.pathVariable("name")))
+    private fun json() = ok().contentType(APPLICATION_JSON_UTF8)
 
 }
 
