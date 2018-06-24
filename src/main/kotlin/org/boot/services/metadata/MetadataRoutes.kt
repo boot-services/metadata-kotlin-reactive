@@ -16,6 +16,7 @@ class MetadataRoutes (val metadata: MetadataApiHandler) {
                     "/metadata".nest {
                         GET("/", metadata::findAll)
                         GET("/{name}", metadata::findOne)
+                        POST("/", metadata::create)
                     }
                 }
             }

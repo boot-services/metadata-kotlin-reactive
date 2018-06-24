@@ -1,6 +1,8 @@
 package org.boot.services.metadata
 
+import io.kotlintest.Tags.Companion.Empty
 import io.kotlintest.shouldBe
+import io.kotlintest.shouldNotBe
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -10,6 +12,7 @@ import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.test.web.reactive.server.body
 import org.springframework.test.web.reactive.server.expectBodyList
 
 @ActiveProfiles("test")
@@ -51,6 +54,23 @@ class MetadataApplicationTests(@Autowired val client: WebTestClient, @Autowired 
                 .returnResult().responseBody!!
 
         result.value shouldBe "thoughtworks"
+    }
+
+    @Test
+    fun `create metadata`(){
+        val result = client.post().uri("/api/metadata/")
+                .accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
+                .syncBody(Metadata("city", "pune"))
+                .exchange()
+                .expectStatus().is2xxSuccessful
+                .expectBodyList<Metadata>()
+                .hasSize(1)
+                .returnResult().responseBody!!
+
+        result[0].id shouldNotBe Empty
+        result[0].name shouldBe "city"
+        result[0].value shouldBe "pune"
+
     }
 
 }
